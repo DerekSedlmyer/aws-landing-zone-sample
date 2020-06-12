@@ -1,0 +1,14 @@
+[
+  {
+    "ParameterKey": "BudgetName",
+    "ParameterValue": "budget-small"
+  },
+  {
+    "ParameterKey": "BudgetAmount",
+    "ParameterValue": "25"
+  },
+  {
+    "ParameterKey": "NotificationEmailAddress",
+    "ParameterValue": "name@email.com"
+  }
+]

@@ -1,0 +1,47 @@
+name: aws-landing-zone-sample
+env:
+  AWS_REGION: us-east-1
+  CUSTOM_CONTROL_TOWER_CONFIGURATION_BUCKET_NAME: custom-control-tower-configuration-${{ secrets.AWS_ACCOUNT_ID }}-us-east-1
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Custom Control Tower Configuration ZIP file
+      run: |
+        mkdir dist
+        zip -r dist/custom-control-tower-configuration.zip custom-control-tower-configuration/
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: cfn-templates
+        path: cfn
+    
+    - uses: actions/upload-artifact@v1
+      with:
+        name: custom-control-tower-configuration
+        path: dist/custom-control-tower-configuration.zip
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: publish
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Deploy Custom Control Tower Configuration
+        run: aws s3 cp custom-control-tower-configuration/custom-control-tower-configuration.zip s3://${{env.CUSTOM_CONTROL_TOWER_CONFIGURATION_BUCKET_NAME}}/custom-control-tower-configuration.zip

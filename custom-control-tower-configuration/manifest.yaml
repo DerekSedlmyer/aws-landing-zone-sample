@@ -1,0 +1,27 @@
+---
+region: us-east-1
+version: 2020-01-01
+
+# Control Tower Custom Service Control Policies
+organization_policies:
+  - name: limit-ec2-instance-types
+    description: Limit EC2 instance type in member accounts
+    policy_file: policies/ec2-instance-types.json
+    apply_to_accounts_in_ou:
+      - developers
+  - name: ceisolutions-limit-rds-instance-types
+    description: Limit RDS instance type in member accounts
+    policy_file: policies/rds-instance-types.json
+    apply_to_accounts_in_ou:
+      - developers
+
+# Control Tower Custom CloudFormation Resources
+cloudformation_resources:
+  - name: budget-small
+    template_file: templates/budget.template
+    parameter_file: parameters/budget.small.json
+    deploy_method: stack_set
+    deploy_to_ou:
+      - developers
+    regions:
+      - us-east-1

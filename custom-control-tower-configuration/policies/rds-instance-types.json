@@ -1,0 +1,23 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LimitRDSInstanceType",
+      "Effect": "Deny",
+      "Action": [
+        "rds:CreateDBInstance",
+        "rds:StartDBInstance"
+      ],  
+      "Resource": "arn:aws:rds:*:*:*",
+      "Condition": {
+        "ForAnyValue:StringNotLike": {
+          "rds:DatabaseClass": [
+            "db.*.micro",
+            "db.*.small",
+            "db.*.medium"
+          ]
+        }
+      }
+    }
+  ]
+}
