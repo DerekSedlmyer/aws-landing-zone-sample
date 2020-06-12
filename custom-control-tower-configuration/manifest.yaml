@@ -9,7 +9,7 @@ organization_policies:
     policy_file: policies/ec2-instance-types.json
     apply_to_accounts_in_ou:
       - developers
-  - name: ceisolutions-limit-rds-instance-types
+  - name: limit-rds-instance-types
     description: Limit RDS instance type in member accounts
     policy_file: policies/rds-instance-types.json
     apply_to_accounts_in_ou:
